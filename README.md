@@ -1,78 +1,174 @@
-# Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student
+# IMAGE TRANSFORMATION
 
-## AIM:
-To write a program to implement the the Logistic Regression Model to Predict the Placement Status of Student.
+## Aim
+To perform image transformation such as Translation, Scaling, Shearing, Reflection, Rotation and Cropping using OpenCV and Python.
 
-## Equipments Required:
-1. Hardware – PCs
-2. Anaconda – Python 3.7 Installation / Jupyter notebook
+## Software Required:
+Anaconda - Python 3.7
 
-## Algorithm
-1. Import the required packages and print the present data.
-2. Print the placement data and salary data.
-3. Find the null and duplicate values.
-4. Using logistic regression find the predicted values of accuracy , confusion matrices.
-5. Display the results.
+## Algorithm:
+### Step1:
+Import the required packages.
+
+### Step2:
+Load the image file in the program.
+
+### Step3:
+Use the techniques for Translation, Scaling, Shearing, Reflection, Rotation and Cropping using OpenCV and Python.
+
+### Step4
+Display the modified image output.
+
+### Step5:
+End the program.
+
+
 
 ## Program:
-```
-Program to implement the the Logistic Regression Model to Predict the Placement Status of Student.
-Developed by: Paul Samson.S
-RegisterNumber: 212222230104
-import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import classification_report
-data=pd.read_csv('Placement_Data1.csv')
-print(data.head())
-data1=data.copy()
-data1=data1.drop(["sl_no","salary"],axis=1)
-print(data1.head())
-print(data1.isnull().sum())
-print(data1.duplicated().sum())
-le=LabelEncoder()
-data1["gender"]=le.fit_transform(data1["gender"])
-data1["ssc_b"]=le.fit_transform(data1["ssc_b"])
-data1["hsc_b"]=le.fit_transform(data1["hsc_b"])
-data1["hsc_s"]=le.fit_transform(data1["hsc_s"])
-data1["degree_t"]=le.fit_transform(data1["degree_t"])
-data1["workex"]=le.fit_transform(data1["workex"])
-data1["specialisation"]=le.fit_transform(data1["specialisation"])
-data1["status"]=le.fit_transform(data1["status"])
-print(data1)
-x=data1.iloc[:,:-1]
-print(x)
-y=data1["status"]
-print(y)
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
-lr=LogisticRegression(solver="liblinear")
-lr.fit(x_train,y_train)
-y_pred=lr.predict(x_test)
-print(y_pred)
-accuracy=accuracy_score(y_test,y_pred)
-print(accuracy)
-confusion=(y_test,y_pred)
-print(confusion)
-classification_report1=classification_report(y_test,y_pred)
-print(classification_report1)
-lr.predict([[1,80,1,90,1,1,90,1,0,85,1,85]])
-```
 
+Developed By: Paul samson.S
+
+Register Number: 212222230104
+
+i)Image Translation
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+in_img=cv2.imread("cat.jpg")
+in_img=cv2.cvtColor(in_img,cv2.COLOR_BGR2RGB)
+plt.axis('off')
+plt.imshow(in_img)
+plt.show()
+```
+ii) Image Scaling
+```import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+in_img=cv2.imread("cat.jpg")
+in_img=cv2.cvtColor(in_img,cv2.COLOR_BGR2RGB)
+rows,cols,dim=in_img.shape
+M=np.float32([[1,0,50],
+              [0,1,50],
+              [0,0,1]])
+trans_img=cv2.warpPerspective(in_img, M, (cols,rows))
+plt.axis('off')
+plt.imshow(trans_img)
+plt.show() 
+```
+iii)Image shearing
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+in_img=cv2.imread("cat.jpg")
+in_img=cv2.cvtColor(in_img,cv2.COLOR_BGR2RGB)
+rows,cols,dim=in_img.shape
+M_x=np.float32([[1,0.5,0],
+                [0,1 ,0],
+                [0,0 ,1]])
+M_y=np.float32([[1,  0,0],
+                [0.5,1,0],
+                [0,  0,1]])
+sheared_img_x=cv2.warpPerspective(in_img,M_x,(int(cols),int(rows)))
+sheared_img_y=cv2.warpPerspective(in_img,M_y,(int(cols),int(rows)))
+plt.axis('off')
+plt.imshow(sheared_img_x)
+plt.show()
+plt.axis('off')
+plt.imshow(sheared_img_y)
+plt.show()
+```
+iv)Image Reflection
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+in_img=cv2.imread("cat.jpg")
+in_img=cv2.cvtColor(in_img,cv2.COLOR_BGR2RGB)
+rows,cols,dim=in_img.shape
+M_x=np.float32([[1,  0,0  ],
+                [0,-1,rows],
+                [0,0,1  ]])
+M_y=np.float32([[-1,0,cols],
+                [ 0,1,0  ],
+                [ 0,0,1  ]])
+reflect_x=cv2.warpPerspective(in_img,M_x,(int(cols),int(rows)))
+reflect_y=cv2.warpPerspective(in_img,M_y,(int(cols),int(rows)))
+plt.axis('off')
+plt.imshow(reflect_x)
+plt.show()
+plt.axis('off')
+plt.imshow(reflect_y)
+plt.show()  
+```
+v)Image Rotation
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+in_img=cv2.imread("cat.jpg")
+in_img=cv2.cvtColor(in_img,cv2.COLOR_BGR2RGB)
+rows,cols,dim=in_img.shape
+angle=np.radians(10)
+M=np.float32([[np.cos(angle),-(np.sin(angle)),0],
+              [np.sin(angle),np.cos(angle),0],
+              [0,0,1]])
+rotated_img=cv2.warpPerspective(in_img,M,(int(cols),int(rows)))
+plt.axis('off')
+plt.imshow(rotated_img)
+plt.show()  
+```
+vi)Image Cropping
+```
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+in_img = cv2.imread("cat.jpg")
+in_img = cv2.cvtColor(in_img,cv2.COLOR_BGR2RGB)
+plt.imshow(in_img)
+plt.show()
+cropped_img=in_img[10:150 ,10:250]
+plt.imshow(cropped_img)
+plt.show()
+```
 ## Output:
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/ae7848d3-d7f6-4bee-8449-bb236ef7ab53)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/e5b072f9-2abb-427f-b3d7-114d410ca945)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/7bba24b8-4639-4732-b12c-070d0f36d06e)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/3298a7a1-5447-4673-b68c-ec84d1011486)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/36fe6ce3-ea53-492c-abdb-1242d82b00b7)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/8d8db01c-354a-40cd-8ed8-fb40a023eafd)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/a6884490-c3c0-4648-abcc-860499f9be45)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/7bdf306e-c668-4d9a-8ff2-8edf49b9983f)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/1215091c-5e46-4e2a-9464-41abb4db93f1)
-![image](https://github.com/Gokkul-M/Implementation-of-Logistic-Regression-Model-to-Predict-the-Placement-Status-of-Student/assets/144870543/95dc9125-43e8-4309-b9ea-9c2c121e13c0)
+### i)Image Translation
+
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/424b06d9-2f0f-4023-9a47-42683e6f5c86)
 
 
-## Result:
-Thus the program to implement the the Logistic Regression Model to Predict the Placement Status of Student is written and verified using python programming.
+### ii) Image Scaling
+
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/80f09bd4-95fb-4a3a-8434-2e8879366aba)
+
+
+
+### iii)Image shearing
+
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/2be5c5e0-c70b-46f9-bc93-4b3988c511e3)
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/e699c5b9-4e37-4c64-b674-a30c999f9943)
+
+### iv)Image Reflection
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/abf8d0e7-6ad1-4eca-b373-c75d8871e28a)
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/af5d1d9f-8265-4a5e-8bc6-b56c8d45b1ba)
+
+
+
+
+
+
+### v)Image Rotation
+
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/213d8d51-bb62-4b5f-a202-a7c0e2f425c7)
+
+
+### vi)Image Cropping
+
+Original
+![image](https://github.com/Afsarjumail/IMAGE-TRANSFORMATIONS/assets/118343395/dba01bb3-3c89-4121-a238-1dc5d674a091)
+Cropped
+
+## Result: 
+
+Thus the different image transformations such as Translation, Scaling, Shearing, Reflection, Rotation and Cropping are done using OpenCV and python programming.
